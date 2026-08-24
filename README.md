@@ -11,4 +11,5 @@ block in `index.html`.
 - [Batch Image Cropper](https://github.com/yukmmz/batch-image-cropper)
 - [Mask Annotator](https://github.com/yukmmz/mask-annotator)
 - [Video Loop Player](https://github.com/yukmmz/video-loop-player)
+- [Click to Get Coord](https://github.com/yukmmz/click-to-get-coord)
 - [Even Dice](https://github.com/yukmmz/even-dice-app)
