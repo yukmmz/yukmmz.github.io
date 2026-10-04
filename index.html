@@ -36,12 +36,38 @@
     line-height: 1.5;
   }
   main {
-    max-width: 880px;
+    max-width: 1680px;              /* use most of a desktop screen; the demos need the width */
     margin: 0 auto;
-    padding: 4rem 1.5rem 5rem;
+    padding: 3rem clamp(1rem, 3vw, 2.5rem) 5rem;
   }
   header {
     margin-bottom: 3rem;
+    position: relative;
+  }
+  .lang-switch {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .lang-switch button {
+    font: inherit;
+    font-size: 0.82rem;
+    padding: 0.25rem 0.8rem;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .lang-switch button[aria-pressed="true"] {
+    background: var(--accent);
+    color: #fff;
+  }
+  @media (max-width: 560px) {
+    .lang-switch { position: static; display: inline-flex; margin-bottom: 1rem; }
   }
   h1 {
     font-size: 1.9rem;
@@ -64,9 +90,6 @@
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
-  }
-  .card .emoji {
-    font-size: 1.6rem;
   }
   .card h2 {
     font-size: 1.15rem;
@@ -103,6 +126,68 @@
   .card a:hover {
     text-decoration: underline;
   }
+  /* Demos: playing from the start on wide screens; folded on phones (tap "Watch demo"). */
+  .demo summary {
+    cursor: pointer;
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.88rem;
+    list-style: none;
+  }
+  .demo summary::-webkit-details-marker { display: none; }
+  .demo[open] summary { margin-bottom: 0.5rem; }
+  .demo img, .demo video {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+  }
+  @media (min-width: 720px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+    .demo summary { display: none; }   /* always open here, so no toggle */
+  }
+  @media (min-width: 1100px) {
+    .grid { grid-template-columns: repeat(3, 1fr); }   /* 3 apps per row; the 4th starts the next row */
+  }
+  .app-head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: inherit !important;
+    font-weight: inherit !important;
+  }
+  .app-head:hover h2 { text-decoration: underline; }
+  .app-head:hover { text-decoration: none !important; }
+  .app-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 11px;
+    flex: 0 0 auto;
+  }
+  .demo img, .demo video { cursor: zoom-in; }
+  /* Enlarged demo: click a demo to open, click anywhere or press Esc to close. */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2vmin;
+    background: rgba(0, 0, 0, 0.85);
+    cursor: zoom-out;
+  }
+  .lightbox[hidden] { display: none; }
+  .lightbox img, .lightbox video {
+    max-width: 96vw;
+    max-height: 94vh;
+    width: auto;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+  }
   footer {
     margin-top: 4rem;
     color: var(--muted);
@@ -116,67 +201,107 @@
 <body>
 <main>
   <header>
-    <h1>yukmmz — Web Apps</h1>
-    <p>Small browser-based tools. No install, no server — everything runs client-side.</p>
+    <div class="lang-switch" role="group" aria-label="Language / 言語">
+      <button type="button" data-lang="en">English</button>
+      <button type="button" data-lang="ja">日本語</button>
+    </div>
+    <h1 data-i18n="title">yukmmz — Web Apps</h1>
+    <p data-i18n="lead">Small browser-based tools. No install, no server — everything runs client-side.</p>
   </header>
 
   <section class="grid">
     <article class="card">
-      <div class="emoji">✂️</div>
-      <h2>Batch Image Cropper</h2>
-      <p>Crop multiple images at once, each with its own independent crop rectangle. Alignment tools, zoom &amp; pan, no upload.</p>
+      <a class="app-head" href="https://yukmmz.github.io/batch-image-cropper/" target="_blank" rel="noopener">
+        <img class="app-icon" src="icons/batch-image-cropper.png" alt="" width="48" height="48">
+        <h2>Batch Image Cropper</h2>
+      </a>
+      <p data-i18n-html="desc.batch-image-cropper">Crop many images in one go: cut every image at the same size and position, or align just the position, size or aspect ratio and frame each one yourself. Images are never uploaded.</p>
+      <details class="demo">
+        <summary data-i18n="demo">▶ Watch demo</summary>
+        <img data-src="demos/batch-image-cropper-demo.gif" alt="batch-image-cropper demo" decoding="async">
+      </details>
       <div class="links">
-        <a href="https://yukmmz.github.io/batch-image-cropper/">Open App →</a>
-        <a class="secondary" href="https://github.com/yukmmz/batch-image-cropper">Source</a>
+        <a href="https://yukmmz.github.io/batch-image-cropper/" target="_blank" rel="noopener" data-i18n="open">Open App →</a>
+        <a class="secondary" href="https://github.com/yukmmz/batch-image-cropper" data-i18n="source">Source</a>
       </div>
     </article>
 
     <article class="card">
-      <div class="emoji">🖌️</div>
-      <h2>Mask Annotator</h2>
-      <p>A browser-only pixel mask annotation tool built for iPad + Apple Pencil. Brush over regions in an image to extract a mask.</p>
+      <a class="app-head" href="https://yukmmz.github.io/mask-annotator/" target="_blank" rel="noopener">
+        <img class="app-icon" src="icons/mask-annotator.png" alt="" width="48" height="48">
+        <h2>Mask Annotator</h2>
+      </a>
+      <p data-i18n-html="desc.mask-annotator">Trace over an object with Apple Pencil and the mask follows its shape. Reuse the previous frame's mask by just moving and rotating it, clear everything outside a circled area at once, and rely on autosave, resume-from-ZIP and ZIP export.</p>
+      <details class="demo">
+        <summary data-i18n="demo">▶ Watch demo</summary>
+        <img data-src="demos/mask-annotator-demo.gif" alt="mask-annotator demo" decoding="async">
+      </details>
       <div class="links">
-        <a href="https://yukmmz.github.io/mask-annotator/">Open App →</a>
-        <a class="secondary" href="https://github.com/yukmmz/mask-annotator">Source</a>
+        <a href="https://yukmmz.github.io/mask-annotator/" target="_blank" rel="noopener" data-i18n="open">Open App →</a>
+        <a class="secondary" href="https://github.com/yukmmz/mask-annotator" data-i18n="source">Source</a>
       </div>
     </article>
 
     <article class="card">
-      <div class="emoji">▶️</div>
-      <h2>Video Loop Player</h2>
-      <p>Pick one or more local videos and play them back-to-back in a continuous loop. Built for kiosk-style displays at poster sessions.</p>
+      <a class="app-head" href="https://yukmmz.github.io/video-loop-player/" target="_blank" rel="noopener">
+        <img class="app-icon" src="icons/video-loop-player.png" alt="" width="48" height="48">
+        <h2>Video Loop Player</h2>
+      </a>
+      <p data-i18n-html="desc.video-loop-player">Pick one or more local videos and play them back-to-back in a loop. Swipe on the screen to step frame by frame, forwards or back, and change the speed. Also handy for leaving a video running on a screen at a poster session.</p>
+      <details class="demo">
+        <summary data-i18n="demo">▶ Watch demo</summary>
+        <video data-src="demos/video-loop-player-demo.mp4" muted loop playsinline preload="none" aria-label="video-loop-player demo"></video>
+      </details>
       <div class="links">
-        <a href="https://yukmmz.github.io/video-loop-player/">Open App →</a>
-        <a class="secondary" href="https://github.com/yukmmz/video-loop-player">Source</a>
+        <a href="https://yukmmz.github.io/video-loop-player/" target="_blank" rel="noopener" data-i18n="open">Open App →</a>
+        <a class="secondary" href="https://github.com/yukmmz/video-loop-player" data-i18n="source">Source</a>
       </div>
     </article>
 
     <article class="card">
-      <div class="emoji">📈</div>
-      <h2>Click to Get Coord</h2>
-      <p>Click points on a video or image and read them back as real-world coordinates, calibrated from two reference points. Exports MATLAB <code>.mat</code>, CSV and plots.</p>
+      <a class="app-head" href="https://yukmmz.github.io/click-to-get-coord/" target="_blank" rel="noopener">
+        <img class="app-icon" src="icons/click-to-get-coord.png" alt="" width="48" height="48">
+        <h2>Click to Get Coord</h2>
+      </a>
+      <p data-i18n-html="desc.click-to-get-coord">Click points on a video or image and read them back as real-world coordinates, calibrated from two reference points. Export as CSV, images, and <code>.mat</code> files that Python and MATLAB can read.</p>
+      <details class="demo">
+        <summary data-i18n="demo">▶ Watch demo</summary>
+        <img data-src="demos/click-to-get-coord-demo.gif" alt="click-to-get-coord demo" decoding="async">
+      </details>
       <div class="links">
-        <a href="https://yukmmz.github.io/click-to-get-coord/">Open App →</a>
-        <a class="secondary" href="https://github.com/yukmmz/click-to-get-coord">Source</a>
+        <a href="https://yukmmz.github.io/click-to-get-coord/" target="_blank" rel="noopener" data-i18n="open">Open App →</a>
+        <a class="secondary" href="https://github.com/yukmmz/click-to-get-coord" data-i18n="source">Source</a>
       </div>
     </article>
 
     <article class="card">
-      <div class="emoji">🎲</div>
-      <h2>Even Dice</h2>
-      <p>A dice-rolling app using Softmax Decay to keep results statistically even over time — recently rolled faces become less likely.</p>
+      <a class="app-head" href="https://yukmmz.github.io/even-dice-app/" target="_blank" rel="noopener">
+        <img class="app-icon" src="icons/even-dice-app.png" alt="" width="48" height="48">
+        <h2>Even Dice</h2>
+      </a>
+      <p data-i18n-html="desc.even-dice-app">A dice-rolling app using Softmax Decay to keep results statistically even over time — recently rolled faces become less likely.</p>
+      <details class="demo">
+        <summary data-i18n="demo">▶ Watch demo</summary>
+        <img data-src="demos/even-dice-app-demo.gif" alt="even-dice-app demo" decoding="async">
+      </details>
       <div class="links">
-        <a href="https://yukmmz.github.io/even-dice-app/">Open App →</a>
-        <a class="secondary" href="https://github.com/yukmmz/even-dice-app">Source</a>
+        <a href="https://yukmmz.github.io/even-dice-app/" target="_blank" rel="noopener" data-i18n="open">Open App →</a>
+        <a class="secondary" href="https://github.com/yukmmz/even-dice-app" data-i18n="source">Source</a>
       </div>
     </article>
     <article class="card">
-      <div class="emoji">⏱️</div>
-      <h2>Multitask Timer</h2>
-      <p>Per-task stopwatches for parallel work: tap a card to start it and whatever was running stops, so the time always lands on exactly one task. Set a target per task and it warns you when you pass it.</p>
+      <a class="app-head" href="https://yukmmz.github.io/multitask-timer/" target="_blank" rel="noopener">
+        <img class="app-icon" src="icons/multitask-timer.png" alt="" width="48" height="48">
+        <h2>Multitask Timer</h2>
+      </a>
+      <p data-i18n-html="desc.multitask-timer">Per-task stopwatches for parallel work: tap a card to start it and whatever was running stops, so the time always lands on exactly one task. Set a target per task and it warns you when you pass it.</p>
+      <details class="demo">
+        <summary data-i18n="demo">▶ Watch demo</summary>
+        <img data-src="demos/multitask-timer-demo.gif" alt="multitask-timer demo" decoding="async">
+      </details>
       <div class="links">
-        <a href="https://yukmmz.github.io/multitask-timer/">Open App →</a>
-        <a class="secondary" href="https://github.com/yukmmz/multitask-timer">Source</a>
+        <a href="https://yukmmz.github.io/multitask-timer/" target="_blank" rel="noopener" data-i18n="open">Open App →</a>
+        <a class="secondary" href="https://github.com/yukmmz/multitask-timer" data-i18n="source">Source</a>
       </div>
     </article>
   </section>
@@ -185,5 +310,102 @@
     <p>GitHub: <a href="https://github.com/yukmmz">github.com/yukmmz</a></p>
   </footer>
 </main>
+<div class="lightbox" id="lightbox" hidden></div>
+<script>
+/* Language: English / Japanese. First visit follows the browser; the choice is remembered. */
+(function () {
+  var STRINGS = {
+  "en": {
+    "title": "yukmmz — Web Apps",
+    "lead": "Small browser-based tools. No install, no server — everything runs client-side.",
+    "open": "Open App →",
+    "source": "Source",
+    "demo": "▶ Watch demo",
+    "desc.batch-image-cropper": "Crop many images in one go: cut every image at the same size and position, or align just the position, size or aspect ratio and frame each one yourself. Images are never uploaded.",
+    "desc.mask-annotator": "Trace over an object with Apple Pencil and the mask follows its shape. Reuse the previous frame's mask by just moving and rotating it, clear everything outside a circled area at once, and rely on autosave, resume-from-ZIP and ZIP export.",
+    "desc.video-loop-player": "Pick one or more local videos and play them back-to-back in a loop. Swipe on the screen to step frame by frame, forwards or back, and change the speed. Also handy for leaving a video running on a screen at a poster session.",
+    "desc.click-to-get-coord": "Click points on a video or image and read them back as real-world coordinates, calibrated from two reference points. Export as CSV, images, and <code>.mat</code> files that Python and MATLAB can read.",
+    "desc.even-dice-app": "A dice-rolling app using Softmax Decay to keep results statistically even over time — recently rolled faces become less likely.",
+    "desc.multitask-timer": "Per-task stopwatches for parallel work: tap a card to start it and whatever was running stops, so the time always lands on exactly one task. Set a target per task and it warns you when you pass it."
+  },
+  "ja": {
+    "title": "yukmmz — Web アプリ",
+    "lead": "インストール不要・サーバー不要。すべてブラウザの中で動く小さなツールです。",
+    "open": "アプリを開く →",
+    "source": "ソース",
+    "demo": "▶ デモを見る",
+    "desc.batch-image-cropper": "複数の画像をまとめてトリミングします。全部の画像を同じ大きさ・同じ位置でトリミングしたり、位置・大きさ・縦横比のどれかだけをそろえてトリミングしたりできます。画像はオンラインにアップロードされません。",
+    "desc.mask-annotator": "Apple Pencil で画像をなぞるだけで、対象の形に沿ったマスクができます。前のコマのマスクをコピーして動かす・回すだけで次のコマに使い回せるほか、囲んだ外側をまとめて消す機能、自動保存、続きからの再開、ZIP での書き出しにも対応しています。",
+    "desc.video-loop-player": "手元の動画を1本または複数選んで、つなげてくり返し再生します。画面をスワイプすると1コマずつ送ったり戻したりでき、速度も変えられます。学会のポスター発表などで、画面に流しっぱなしにする使い方もおすすめです。",
+    "desc.click-to-get-coord": "動画や画像の上をクリックして、点の位置を実際の座標として読み取ります。2つの基準点で校正し、CSV・画像・Python や MATLAB で読み込める <code>.mat</code> 形式などで書き出せます。",
+    "desc.even-dice-app": "少ない回数でも出目がかたよりにくいサイコロ。最近出た目ほど出にくくなるように、確率を少しずつ調整します（ソフトマックス減衰）。",
+    "desc.multitask-timer": "並行して進める作業のための、タスク別ストップウォッチ。カードを押すとそのタスクの計測が始まり、ほかは自動で止まるので、時間はいつも1つのタスクだけに入ります。タスクごとに目安時間を決めておくと、超えたときに知らせます。"
+  }
+};
+  var KEY = 'yukmmz-portal/lang';
+  function stored() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
+  function apply(lang) {
+    var t = STRINGS[lang];
+    document.documentElement.lang = lang;
+    document.title = t.title;
+    document.querySelectorAll('[data-i18n]').forEach(function (el) { el.textContent = t[el.getAttribute('data-i18n')]; });
+    document.querySelectorAll('[data-i18n-html]').forEach(function (el) { el.innerHTML = t[el.getAttribute('data-i18n-html')]; });
+    document.querySelectorAll('.lang-switch button').forEach(function (b) {
+      b.setAttribute('aria-pressed', b.getAttribute('data-lang') === lang ? 'true' : 'false');
+    });
+  }
+  var lang = stored() || ((navigator.language || '').toLowerCase().indexOf('ja') === 0 ? 'ja' : 'en');
+  apply(lang);
+  document.querySelectorAll('.lang-switch button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      lang = b.getAttribute('data-lang');
+      try { localStorage.setItem(KEY, lang); } catch (e) { /* private mode */ }
+      apply(lang);
+    });
+  });
+})();
+</script>
+<script>
+/* Demos load only when shown: opened at once on wide screens, on tap on phones. */
+(function () {
+  var wide = window.matchMedia('(min-width: 720px)');
+  function load(d) {
+    var m = d.querySelector('[data-src]');
+    if (!m) return;
+    m.src = m.getAttribute('data-src');
+    m.removeAttribute('data-src');
+    if (m.tagName === 'VIDEO') { m.autoplay = true; m.play().catch(function () {}); }
+  }
+  document.querySelectorAll('details.demo').forEach(function (d) {
+    d.addEventListener('toggle', function () { if (d.open) load(d); });
+    if (wide.matches) d.open = true;
+  });
+})();
+</script>
+<script>
+/* Click a demo to see it large; click anywhere or press Esc to close. */
+(function () {
+  var box = document.getElementById('lightbox');
+  function close() { box.hidden = true; box.textContent = ''; }
+  document.querySelectorAll('.demo img, .demo video').forEach(function (m) {
+    m.addEventListener('click', function () {
+      if (!m.getAttribute('src')) return;
+      var big = document.createElement(m.tagName === 'VIDEO' ? 'video' : 'img');
+      big.src = m.getAttribute('src');
+      if (big.tagName === 'VIDEO') {
+        big.muted = true; big.loop = true; big.autoplay = true; big.playsInline = true;
+        big.currentTime = m.currentTime || 0;
+      } else {
+        big.alt = m.alt;
+      }
+      box.textContent = '';
+      box.appendChild(big);
+      box.hidden = false;
+    });
+  });
+  box.addEventListener('click', close);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !box.hidden) close(); });
+})();
+</script>
 </body>
 </html>
