@@ -14,3 +14,10 @@ block in `index.html`.
 - [Click to Get Coord](https://github.com/yukmmz/click-to-get-coord)
 - [Multitask Timer](https://github.com/yukmmz/multitask-timer)
 - [Even Dice](https://github.com/yukmmz/even-dice-app)
+
+## New-app suggestions (FB)
+
+The **FB** button (top right) and the "Suggest an app" panel under the cards open a form for
+suggesting new apps. It posts to the same feedback receiver as the FB button in each app
+(`apps-operator/scripts/feedback-gas/`), with `app: "portal"`. Feedback on an existing app is
+meant to go through that app's own FB button. Nothing is sent unless the visitor presses Send.
