@@ -74,7 +74,7 @@
   @media (max-width: 560px) {
     .top-actions { position: static; margin-bottom: 1rem; }
   }
-  /* FB: same look as the FB key in every app (docs/common-ui.md §9), opens the app-suggestion window. */
+  /* FB: same look as the FB key in every app (docs/common-ui.md §9), opens the suggestions-and-feedback window. */
   .fb-btn {
     width: 36px;
     height: 36px;
@@ -304,6 +304,92 @@
   footer a {
     color: var(--muted);
   }
+  /* App Remix Kit: a pointer under the header lead, and the panel under the app cards. */
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  .remix-pointer {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.9rem;
+    padding: 0.3rem 0.85rem 0.3rem 0.35rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--fg);
+    font-size: 0.88rem;
+    text-decoration: none;
+    transition: border-color 0.15s;
+  }
+  .remix-pointer:hover { border-color: var(--accent); }
+  .remix-pointer .tag {
+    padding: 0.1rem 0.55rem;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .remix-pointer .arrow { color: var(--accent); }
+  .remix {
+    margin-top: 2.5rem;
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--card-bg);
+    background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 10%, var(--card-bg)), var(--card-bg) 60%);
+    scroll-margin-top: 1.5rem;
+  }
+  .remix:target { animation: remix-flash 1.6s ease-out; }
+  @keyframes remix-flash {
+    from { box-shadow: 0 0 0 3px var(--accent); }
+    to   { box-shadow: 0 0 0 3px transparent; }
+  }
+  .remix .eyebrow {
+    margin: 0 0 0.35rem;
+    color: var(--accent);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .remix h2 { font-size: 1.45rem; margin: 0 0 0.5rem; line-height: 1.3; }
+  .remix .remix-lead { color: var(--muted); margin: 0; max-width: 60em; }
+  .remix-steps {
+    list-style: none;
+    margin: 1.4rem 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.9rem;
+    counter-reset: step;
+  }
+  .remix-steps li {
+    counter-increment: step;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--bg);
+  }
+  .remix-steps li::before {
+    content: counter(step);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    margin-bottom: 0.5rem;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--accent) 15%, transparent);
+    color: var(--accent);
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+  .remix-steps strong { display: block; margin-bottom: 0.2rem; }
+  .remix-steps span { color: var(--muted); font-size: 0.88rem; }
+  .remix-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1rem; }
+  .remix-actions a.btn-primary, .remix-actions a.btn-plain { text-decoration: none; display: inline-block; }
+  .remix-actions .remix-note { color: var(--muted); font-size: 0.82rem; }
   /* Quick tooltip for buttons (mouse only; shown after 0.5 s). Same as the apps (apps-operator/docs/common-ui.md §10). */
   .quick-tip {
     position: fixed;
@@ -327,7 +413,7 @@
   <header>
     <div class="top-actions">
       <button type="button" class="fb-btn" id="fb-btn" data-i18n-title="fb.button" data-i18n-aria-label="fb.button"
-              title="Suggest a new app" aria-label="Suggest a new app"><span class="fb-mark" aria-hidden="true">FB</span></button>
+              title="Suggestions &amp; feedback" aria-label="Suggestions &amp; feedback"><span class="fb-mark" aria-hidden="true">FB</span></button>
       <div class="lang-switch" role="group" aria-label="Language / 言語">
         <button type="button" data-lang="en">English</button>
         <button type="button" data-lang="ja">日本語</button>
@@ -335,6 +421,7 @@
     </div>
     <h1 data-i18n="title">yukmmz — Web Apps</h1>
     <p data-i18n="lead">Small browser-based tools. No install, no server — everything runs client-side.</p>
+    <a class="remix-pointer" href="#remix-kit"><span class="tag">NEW</span><span data-i18n="remix.pointer">Make any of these apps your own, with AI</span><span class="arrow" aria-hidden="true">↓</span></a>
   </header>
 
   <section class="grid">
@@ -450,6 +537,21 @@
     </article>
   </section>
 
+  <section class="remix" id="remix-kit" aria-labelledby="remix-title">
+    <p class="eyebrow">App Remix Kit</p>
+    <h2 id="remix-title" data-i18n="remix.title">Make these apps your own, with AI</h2>
+    <p class="remix-lead" data-i18n="remix.lead">The apps here are kept simple on purpose, so you can reshape them however you like. This kit lets an AI agent such as Claude Code or Codex walk you through it — even if you have never programmed or used GitHub.</p>
+    <ol class="remix-steps">
+      <li><strong data-i18n="remix.s1">Add the kit to your AI</strong><span data-i18n="remix.s1d">Download it and place one folder. The AI can do this for you too.</span></li>
+      <li><strong data-i18n="remix.s2">Say what you want</strong><span data-i18n="remix.s2d">"I want my own version of this app that does …" — the AI gets the code, changes it, and lets you try it step by step.</span></li>
+      <li><strong data-i18n="remix.s3">Publish at your own URL</strong><span data-i18n="remix.s3d">If you like, it goes live on GitHub Pages. The AI also helps you create a GitHub account.</span></li>
+    </ol>
+    <div class="remix-actions">
+      <a class="btn-primary" href="https://github.com/yukmmz/app-remix-kit#readme" data-i18n-href="remix.href" data-i18n="remix.open">Get the kit →</a>
+      <span class="remix-note" data-i18n="remix.note">Free · MIT License · the original apps stay unchanged</span>
+    </div>
+  </section>
+
   <section class="suggest">
     <div>
       <h2 data-i18n="suggest.title">Want an app that doesn't exist yet?</h2>
@@ -465,8 +567,8 @@
 <div class="lightbox" id="lightbox" hidden></div>
 <div class="overlay" id="fbOverlay" hidden>
   <form class="fb-card" id="fbForm" role="dialog" aria-labelledby="fbTitle" novalidate>
-    <h2 id="fbTitle" data-i18n="fb.title">Suggest a new app</h2>
-    <p data-i18n="fb.lead">What kind of app would you like? Tell me the situation you would use it in and what it should do.</p>
+    <h2 id="fbTitle" data-i18n="fb.title">Suggestions &amp; feedback</h2>
+    <p data-i18n="fb.lead">Suggest a new app, or send feedback about this site and what it offers. For a new app, tell me the situation you would use it in and what it should do.</p>
     <p class="fb-other" data-i18n="fb.other">For feedback on an existing app, please use the FB button inside that app.</p>
     <textarea id="fbMessage" maxlength="2000" rows="6" required
               data-i18n-placeholder="fb.placeholder" data-i18n-aria-label="fb.message"></textarea>
@@ -502,11 +604,23 @@
     "suggest.title": "Want an app that doesn't exist yet?",
     "suggest.lead": "Tell me what kind of app you would like. Feedback on an existing app is welcome too — please send it with the FB button inside that app.",
     "suggest.button": "Suggest an app",
-    "fb.button": "Suggest a new app",
-    "fb.title": "Suggest a new app",
-    "fb.lead": "What kind of app would you like? Tell me the situation you would use it in and what it should do.",
+    "remix.pointer": "Make any of these apps your own, with AI",
+    "remix.title": "Make these apps your own, with AI",
+    "remix.lead": "The apps here are kept simple on purpose, so you can reshape them however you like. This kit lets an AI agent such as Claude Code or Codex walk you through it — even if you have never programmed or used GitHub.",
+    "remix.s1": "Add the kit to your AI",
+    "remix.s1d": "Download it and place one folder. The AI can do this for you too.",
+    "remix.s2": "Say what you want",
+    "remix.s2d": "\"I want my own version of this app that does …\" — the AI gets the code, changes it, and lets you try it step by step.",
+    "remix.s3": "Publish at your own URL",
+    "remix.s3d": "If you like, it goes live on GitHub Pages. The AI also helps you create a GitHub account.",
+    "remix.open": "Get the kit →",
+    "remix.href": "https://github.com/yukmmz/app-remix-kit#readme",
+    "remix.note": "Free · MIT License · the original apps stay unchanged",
+    "fb.button": "Suggestions & feedback",
+    "fb.title": "Suggestions & feedback",
+    "fb.lead": "Suggest a new app, or send feedback about this site and what it offers. For a new app, tell me the situation you would use it in and what it should do.",
     "fb.other": "For feedback on an existing app, please use the FB button inside that app.",
-    "fb.message": "Your suggestion",
+    "fb.message": "Your message",
     "fb.placeholder": "e.g. When I …, I wish there were an app that …",
     "fb.contact": "Contact (optional, if you would like a reply)",
     "fb.note": "Only what you write, plus the display language, is sent to the developer when you press Send.",
@@ -533,11 +647,23 @@
     "suggest.title": "こんなアプリが欲しい、はありませんか？",
     "suggest.lead": "新しいアプリの提案を募集しています。各アプリへのご意見も歓迎ですが、そちらはアプリの中の FB ボタンからお願いします。",
     "suggest.button": "アプリを提案する",
-    "fb.button": "新しいアプリを提案する",
-    "fb.title": "新しいアプリを提案する",
-    "fb.lead": "どんなアプリが欲しいですか？ 使いたい場面と、何ができると嬉しいかを書いてください。",
+    "remix.pointer": "ここのアプリを、AI で自分好みに作り変えられます",
+    "remix.title": "AI と一緒に、アプリを自分好みに",
+    "remix.lead": "ここのアプリは、好きなように作り変えてもらえるよう、あえて単純に作っています。このキットを使うと、Claude Code や Codex などの AI が最初から最後まで案内します。プログラミングや GitHub が初めてでも大丈夫です。",
+    "remix.s1": "キットを AI に入れる",
+    "remix.s1d": "ダウンロードして、フォルダを1つ置くだけ。AI に頼んで入れてもらうこともできます。",
+    "remix.s2": "やりたいことを伝える",
+    "remix.s2d": "「このアプリを、〜できるように自分用に変えたい」と頼むと、AI がコードを用意して変更し、一歩ずつ試させてくれます。",
+    "remix.s3": "自分の URL で公開する",
+    "remix.s3d": "希望すれば GitHub Pages で公開できます。GitHub アカウントの作成も AI が手伝います。",
+    "remix.open": "キットを見る →",
+    "remix.href": "https://github.com/yukmmz/app-remix-kit/blob/main/README_ja.md",
+    "remix.note": "無料・MIT ライセンス・元のアプリはそのまま",
+    "fb.button": "提案・フィードバック",
+    "fb.title": "提案・フィードバック",
+    "fb.lead": "新しいアプリの提案や、このサイト・配布物へのご意見をどうぞ。新しいアプリなら、使いたい場面と、何ができると嬉しいかを書いてください。",
     "fb.other": "各アプリへのフィードバックは、そのアプリの中の FB ボタンからお願いします。",
-    "fb.message": "提案の内容",
+    "fb.message": "内容",
     "fb.placeholder": "例: 〜するときに、〜できるアプリがあると嬉しい",
     "fb.contact": "連絡先（任意・返信がほしい場合）",
     "fb.note": "送信を押したときに、書いた内容と表示言語だけを開発者に送ります。",
@@ -558,7 +684,7 @@
     window.portalStrings = t;   // read by the FB window
     document.querySelectorAll('[data-i18n]').forEach(function (el) { el.textContent = t[el.getAttribute('data-i18n')]; });
     document.querySelectorAll('[data-i18n-html]').forEach(function (el) { el.innerHTML = t[el.getAttribute('data-i18n-html')]; });
-    ['title', 'aria-label', 'placeholder'].forEach(function (attr) {
+    ['title', 'aria-label', 'placeholder', 'href'].forEach(function (attr) {
       document.querySelectorAll('[data-i18n-' + attr + ']').forEach(function (el) {
         el.setAttribute(attr, t[el.getAttribute('data-i18n-' + attr)]);
       });
@@ -621,11 +747,11 @@
 })();
 </script>
 <script>
-/* FB: new-app suggestions, sent to the same receiver as every app's FB button (apps-operator/scripts/feedback-gas/).
+/* FB: suggestions and feedback on the portal (new apps, the App Remix Kit), sent to the same receiver as every app's FB button (apps-operator/scripts/feedback-gas/).
    Feedback on a specific app should go through that app's own FB button. */
 (function () {
   var FEEDBACK_URL = 'https://script.google.com/macros/s/AKfycbxFJ-rTK2e5h05r6_j0RJJu-1Fo4Or3nsAnYcnGXC2i9I8FEdOIbNaXI1BfjunkQHEP/exec';
-  var APP_ID = 'portal';   // the receiver's app name for this page = new-app suggestions
+  var APP_ID = 'portal';   // the receiver's app name for this page = suggestions and feedback on the portal and what it offers
   var overlay = document.getElementById('fbOverlay');
   var form = document.getElementById('fbForm');
   var message = document.getElementById('fbMessage');
