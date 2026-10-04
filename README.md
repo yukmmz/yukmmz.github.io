@@ -12,4 +12,5 @@ block in `index.html`.
 - [Mask Annotator](https://github.com/yukmmz/mask-annotator)
 - [Video Loop Player](https://github.com/yukmmz/video-loop-player)
 - [Click to Get Coord](https://github.com/yukmmz/click-to-get-coord)
+- [Multitask Timer](https://github.com/yukmmz/multitask-timer)
 - [Even Dice](https://github.com/yukmmz/even-dice-app)
