@@ -1,0 +1,7 @@
+# OS
+.DS_Store
+
+# 作業用（公開しない）
+tmp/
+.orchestration-edited.*
+.rule-review-log.*
