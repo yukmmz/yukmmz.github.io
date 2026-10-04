@@ -8,12 +8,8 @@ block in `index.html`.
 
 ## Apps listed
 
-- [Batch Image Cropper](https://github.com/yukmmz/batch-image-cropper)
-- [Mask Annotator](https://github.com/yukmmz/mask-annotator)
-- [Video Loop Player](https://github.com/yukmmz/video-loop-player)
-- [Click to Get Coord](https://github.com/yukmmz/click-to-get-coord)
-- [Multitask Timer](https://github.com/yukmmz/multitask-timer)
-- [Even Dice](https://github.com/yukmmz/even-dice-app)
+The list of apps is the site itself: see **https://yukmmz.github.io/** (each card links to the app and its
+source). It is not repeated here, so adding an app only means adding its card to `index.html`.
 
 ## New-app suggestions (FB)
 
